@@ -30,11 +30,10 @@ public class MainActivity extends AppCompatActivity
     Button mbtumn;
     Button mbtchas;
     Button mbtrav;
-    Button mbt11;
-    Button mbt12;
-    Button mbtproc;
+    Button mbtznak;
+    Button mbttoch;
     Button mbtdel;
-    Button mbtc;
+    Button mbtcl;
     TextView mtablo;
 
     //состояние калькулятора
@@ -42,8 +41,7 @@ public class MainActivity extends AppCompatActivity
     String mOperator = "";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mbt1 = findViewById(R.id.bt1);
@@ -56,27 +54,24 @@ public class MainActivity extends AppCompatActivity
         mbt8 = findViewById(R.id.bt8);
         mbt9 = findViewById(R.id.bt9);
         mbt10 = findViewById(R.id.bt10);
-        mbt11 = findViewById(R.id.bt11);
-        mbt12 = findViewById(R.id.bt12);
+        mbtznak = findViewById(R.id.btznak);
+        mbttoch = findViewById(R.id.bttoch);
         mbtplus = findViewById(R.id.btplus);
         mbtmin = findViewById(R.id.btmin);
         mbtchas = findViewById(R.id.btchas);
         mbtumn = findViewById(R.id.btumn);
         mbtrav = findViewById(R.id.btrav);
-        mbtproc = findViewById(R.id.btproc);
         mbtdel = findViewById(R.id.btdel);
-        mbtc = findViewById(R.id.btc);
+        mbtcl = findViewById(R.id.btcl);
         mtablo = findViewById(R.id.tablo);
 
-        View.OnClickListener numberListener = new View.OnClickListener()
-        {
+        View.OnClickListener numberListener = new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 onNumberClick(v);
             }
-               public void onNumberClick(View button)
-            {
+
+            public void onNumberClick(View button) {
                 String number = ((Button) button).getText().toString();
                 String tablo = mtablo.getText().toString();
                 if (tablo.equals("0"))
@@ -98,15 +93,13 @@ public class MainActivity extends AppCompatActivity
         mbt10.setOnClickListener(numberListener);
 
 
-        View.OnClickListener operatorListener = new View.OnClickListener()
-        {
+        View.OnClickListener operatorListener = new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 onOperatorClick(v);
             }
-              public void onOperatorClick(View button)
-              {
+
+            public void onOperatorClick(View button) {
                 //1
                 String operator = ((Button) button).getText().toString();
                 mOperator = operator;
@@ -115,7 +108,7 @@ public class MainActivity extends AppCompatActivity
                 mValue = Float.parseFloat(tablo);
                 //3
                 mtablo.setText("0");
-              }
+            }
         };
         mbtplus.setOnClickListener(operatorListener);
         mbtmin.setOnClickListener(operatorListener);
@@ -134,29 +127,106 @@ public class MainActivity extends AppCompatActivity
                 //2
                 float value = Float.parseFloat(tablo);
                 float result = value;
+                boolean a = false;
                 //3
-                switch (mOperator) {
+                switch (mOperator)
+                // сложение
+                {
                     case "+": {
                         result = value + mValue;
                         break;
                     }
+                    //вычитание
+                    case "-":
+                    {
+                        result = value - mValue;
+                        break;
+                    }
+                    //умножение
+                    case "*":
+                    {
+                        result = value * mValue;
+                        break;
+                    }
+                    //деление
+                    case "/":
+                     {
+                        if (value == 0) {
+                            a = true;
+                        } else {
+                            a = false;
+                            result = value / mValue;
+                        }
+                        break;
+                    }
                 }
-                //TODO: другие операторы
+                ;
+                //4
+                DecimalFormat format = new DecimalFormat("0.#####");
+                format.setRoundingMode(RoundingMode.DOWN);
+                String resultText = format.format(value);
+                //5
+                mtablo.setText(resultText);
+                //6
+                mValue = result;
+                mOperator = "";
             }
         };
-            //4
-            DecimalFormat format = new DecimalFormat("0.#####");
-        format.setRoundingMode(RoundingMode.DOWN);
-            String resultText = format.format(value);
-            //5
-        mtablo.setText(resultText);
-            //6
-            mValue =result;
-            mOperator ="";
+        mbtrav.setOnClickListener(resultListener);
+        //кнопка с "."
+        View.OnClickListener tochListener= new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                onTochListener(v);
+            }
+
+            public void onTochListener(View button) {
+                String text = mtablo.getText().toString();
+                String tablo = text + ".";
+                mtablo.setText(tablo);
+            }
+        };
+              mbttoch.setOnClickListener(tochListener);
+// кнопка удаления знака
+        View.OnClickListener delListener= new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                onDelListener(v);
+            }
+
+            public void onDelListener(View button) {
+                String text = mtablo.getText().toString();
+                if(text.length()>1)
+                {
+                    text = text.substring(0, text.length() - 1);
+                    mtablo.setText(text);
+                }
+                else if (text.length()<=1)
+                 {
+                    mtablo.setText("0");
+                 }
+            }
+        };
+        mbtdel.setOnClickListener(delListener);
+// кнопка очистки экрана
+        View.OnClickListener clListener= new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                onClListener(v);
+            }
+
+            public void onClListener(View button) {
+                mValue=0;
+                mOperator="";
+                mtablo.setText("0");
+            }
+        };
+        mbtcl.setOnClickListener(clListener);
 
     }
-    mbtrav.setOnClickListener(resultListener);
-
-};
+}
 
 
