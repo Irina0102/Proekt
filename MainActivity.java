@@ -13,9 +13,8 @@ import java.text.DecimalFormat;
 /**
  * calculytor
  */
-public class MainActivity extends AppCompatActivity {
-
-    //кнопки
+public class MainActivity extends AppCompatActivity
+{    //кнопки
     Button mbt1;
     Button mbt2;
     Button mbt3;
@@ -76,7 +75,15 @@ public class MainActivity extends AppCompatActivity {
             {
                 onNumberClick(v);
             }
-
+               public void onNumberClick(View button)
+            {
+                String number = ((Button) button).getText().toString();
+                String tablo = mtablo.getText().toString();
+                if (tablo.equals("0"))
+                    tablo = number;
+                else tablo += number;
+                mtablo.setText(tablo);
+            }
         };
         //подписки
         mbt1.setOnClickListener(numberListener);
@@ -96,74 +103,60 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                onOperatorListener(v);
+                onOperatorClick(v);
             }
-
+              public void onOperatorClick(View button)
+              {
+                //1
+                String operator = ((Button) button).getText().toString();
+                mOperator = operator;
+                //2
+                String tablo = mtablo.getText().toString();
+                mValue = Float.parseFloat(tablo);
+                //3
+                mtablo.setText("0");
+              }
         };
         mbtplus.setOnClickListener(operatorListener);
         mbtmin.setOnClickListener(operatorListener);
         mbtchas.setOnClickListener(operatorListener);
         mbtumn.setOnClickListener(operatorListener);
 
-        View.OnClickListener resultListener = new View.OnClickListener()
-        {
+        View.OnClickListener resultListener = new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 onResultListener(v);
             }
-        };
-        mbtrav.setOnClickListener(resultListener);
-        public void onNumberClick(View button)
-        {
-            String number = ((Button) button).getText().toString();
-            String tablo = mtablo.getText().toString();
-            if (tablo.equals("0"))
-                tablo = number;
-            else tablo += number;
-            mtablo.setText(tablo);
-        }
 
-        public void onOperatorListeren(View button)
-        {
-            //1
-            String operator = ((Button) button).getText().toString();
-            mOperator = operator;
-            //2
-            String tablo = mtablo.getText().toString();
-            mValue = Float.parseFloat(tablo);
-            //3
-            mtablo.setText("0");
-        }
-    }
-
-    public void onResultListener(View button)
-    {
-        //1
-        String tablo = mtablo.getText().toString();
-        //2
-        float value = Float.parseFloat(tablo);
-        float result = value;
-        //3
-        switch (mOperator)
-        {
-            case "+": {
-                result = value + mValue;
-                break;
-
+            public void onResultListener(View button) {
+                //1
+                String tablo = mtablo.getText().toString();
+                //2
+                float value = Float.parseFloat(tablo);
+                float result = value;
+                //3
+                switch (mOperator) {
+                    case "+": {
+                        result = value + mValue;
+                        break;
+                    }
+                }
                 //TODO: другие операторы
             }
-        }
-        //4
-        DecimalFormat format = new DecimalFormat("0.#####");
+        };
+            //4
+            DecimalFormat format = new DecimalFormat("0.#####");
         format.setRoundingMode(RoundingMode.DOWN);
-        String resultText = format.format(value);
-        //5
+            String resultText = format.format(value);
+            //5
         mtablo.setText(resultText);
-        //6
-        mValue = result;
-        mOperator = "";
+            //6
+            mValue =result;
+            mOperator ="";
+
     }
-}
+    mbtrav.setOnClickListener(resultListener);
+
+};
 
 
